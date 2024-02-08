@@ -1,16 +1,15 @@
 from flask import Flask
 from flask_cors import CORS
-from Firebase import FireBaseClass
+from flask_restful import Api
+import Resources
 
 app = Flask(__name__)
 CORS(app)
+api = Api(app)
 
-Firebase = FireBaseClass()
 
-
-@app.route('/')
-def main():
-    return Firebase.get_Name()
+api.add_resource(Resources.data, '/name')
+api.add_resource(Resources.login, '/login')
 
 
 if __name__ == '__main__':
