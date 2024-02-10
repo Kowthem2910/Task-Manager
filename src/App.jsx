@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {auth} from '../firebaseConfig';
-import axios from 'axios';
 
 const App = () => {
   const [email, setEmail] = useState();
@@ -11,7 +10,7 @@ const App = () => {
     try {
       const {user} = await signInWithEmailAndPassword(auth, email, password);
       const userId = await user.getIdToken();
-      const res = await axios.post('http://localhost:5000/login', {idToken:userId});
+      
       console.log(res);
       setStatus('success');
     } catch (error) {
