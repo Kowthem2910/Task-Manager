@@ -1,5 +1,5 @@
 
-const userInitalState = {
+const initalState = {
     userInfo:null,
     isLoggedIn:false,
 }
@@ -18,10 +18,11 @@ const userReducer = (state = initalState, action) => {
                 isLoggedIn:false,
                 userInfo:null
             }
+        default:
+            return state
     }
 }
 
-const taskReducer = (state = [], action) => {}
 
 
-export {userReducer, taskReducer};
+export default userReducer;
