@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { signIn } from "../Functions/FireBaseFunctions";
 import { login } from "../Redux/userActions";
 import { useToast } from "@/components/ui/use-toast";
+import { Toggle } from "@/components/ui/toggle";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ const Login = () => {
       toast({
         title: "Login Panniyachu",
         description: "follow panuriya da body soda, vaa suruthi",
-        duration:2000
+        duration: 2000,
       });
       dispatch(login(res));
       navigate("/home");
@@ -32,7 +33,7 @@ const Login = () => {
       toast({
         title: "Login panalada panni",
         description: "password / email ae check pannu da body soda",
-        duration:3000, 
+        duration: 3000,
         variant: "destructive",
       });
     }
@@ -66,12 +67,26 @@ const Login = () => {
             <Label htmlFor="password" className=" font-semibold text-[18px]">
               Password
             </Label>
-            <Input
-              type={passwordVisible ? "text" : "password"}
-              placeholder="Enter Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className=" inline-flex items-center gap-2">
+              <Input
+                type={passwordVisible ? "text" : "password"}
+                placeholder="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Toggle
+                variant="outline"
+                onClick={() => {
+                  setPasswordVisible((prev) =>!prev);
+                }}
+                disabled={password===''}
+              >
+                <Icon
+                  name={passwordVisible ? "EyeOff" : "Eye"}
+                  size={24}
+                />
+              </Toggle>
+            </div>
           </div>
 
           <Button className=" font-semibold text-[18px] mt-2">Login</Button>
