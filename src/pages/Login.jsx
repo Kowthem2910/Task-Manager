@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../Functions/FireBaseFunctions";
 import { login } from "../Redux/userActions";
+import { useToast } from "@/components/ui/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,24 +15,38 @@ const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await signIn(email, password);
-    if(res.status === 'ok'){
-      dispatch(login(res))
-      navigate('/home')
-    }else{
-      alert(res.data)
+    if (res.status === "ok") {
+      toast({
+        title: "Login Panniyachu",
+        description: "follow panuriya da body soda, vaa suruthi",
+        duration:2000
+      });
+      dispatch(login(res));
+      navigate("/home");
+    } else {
+      toast({
+        title: "Login panalada panni",
+        description: "password / email ae check pannu da body soda",
+        duration:3000, 
+        variant: "destructive",
+      });
     }
-      
-  }
+  };
 
   return (
     <div className=" h-screen w-screen flex flex-col items-center justify-center">
       <div className=" w-[350px] h-[400px] flex flex-col items-center">
-        <form className=" h-full w-full box-border p-4 flex flex-col justify-start" onSubmit={(e)=>{handleSubmit(e)}}>
+        <form
+          className=" h-full w-full box-border p-4 flex flex-col justify-start"
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
           <h1 className=" text-[30px] font-bold mb-2 inline-flex items-center gap-2">
             <Icon name="ListChecks" strokeWidth={3} size={30} /> Task Manager
           </h1>

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, SignUp, Login } from "./pages/Index";
 import AuthRoutes from "./Routes/AuthRoutes";
 import store from './Redux/reducer';
+import { Toaster } from "./components/ui/toaster";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           />
         </Routes>
       </Router>
+      <Toaster/>
     </Provider>
   );
 };
