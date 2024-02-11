@@ -5,6 +5,8 @@ import { logOut } from '../Functions/FireBaseFunctions';
 import { useToast } from '@/components/ui/use-toast';
 import { logout } from '../Redux/userActions';
 import {useNavigate} from 'react-router-dom';
+import { useTheme } from '../Utils/ThemeProvider';
+import Icon from '../Utils/Icons';
 
 
 const Home = () => {
@@ -12,6 +14,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const {toast} = useToast();
   const navigate = useNavigate();
+  const {theme, toggleTheme } = useTheme()
 
   const handleLogout = async() => {
     const res = await logOut();
@@ -42,7 +45,10 @@ const Home = () => {
     <div>
       <h1>Home</h1>
       <h2>{data.email}</h2>
-      <Button onClick={handleLogout}>Logout</Button>
+      <Button className='gap-2 ml-2 mt-2' onClick={handleLogout}>Logout</Button>
+      <Button className='gap-2 ml-2 mt-2' onClick={()=>{toggleTheme('dark')}}>
+        <Icon name={theme === 'light'?'Moon':'Sun'} size={20}/>
+      </Button>
     </div>
   )
 }
