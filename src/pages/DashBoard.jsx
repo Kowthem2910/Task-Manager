@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Utils/ThemeProvider";
 import Icon from "../Utils/Icons";
 
-const Home = () => {
+const DashBoard = () => {
   const { data } = useSelector(mapStatetoProps);
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -67,4 +67,4 @@ const mapStatetoProps = (user) => {
   return user.user.userInfo;
 };
 
-export default Home;
+export default DashBoard;

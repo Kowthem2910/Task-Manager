@@ -90,8 +90,8 @@ const Login = () => {
           </div>
 
           <Button className=" font-semibold text-[18px] mt-2">Login</Button>
+          <p className=" text-center">Don't have an account ?<Button variant={"link"} onClick={()=>{navigate('/signup')}}>Sign Up</Button></p>
         </form>
-          <p className=" [&]:mt-0">Don't have an account ?<Button variant={"link"} onClick={()=>{navigate('/signup')}}>Sign Up</Button></p>
       </div>
     </div>
   );
