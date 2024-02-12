@@ -1,5 +1,5 @@
 import { auth } from "../firebaseConfig";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
 
 
 const signIn = async (email, password) => {
@@ -16,18 +16,29 @@ const signIn = async (email, password) => {
     };
     return { data: userData, status: "ok" };
   } catch (error) {
-    console.log(error.message);
     return { data: error.message, status: "error" };
   }
 };
 
-const signUp = async (email, password) => {
+const signUp = async (userName, email, password) => {
+  userName = userName.replace(/ /g, "");
   try {
-    const user  = await auth.createUserWithEmailAndPassword(email, password);
-    return user;
+    const user  = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(user.user, {
+      displayName: userName, photoURL: `https://source.boringavatars.com/beam/80/${userName}/`
+    })
+    const userData = {
+      uid: user.user.uid,
+      email: user.user.email,
+      displayName: user.user.displayName,
+      authToken: user.user.accessToken,
+      photoUrl: user.user.photoURL,
+      phone: user.user.phoneNumber,
+      isLoggedin: true,
+    };
+    return { data: userData, status: "ok" }
   } catch (error) {
-    console.log(error);
-    return error.message;
+    return { data: error.message, status: "error" };
   }
 };
 
