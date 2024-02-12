@@ -30,7 +30,7 @@ const SignUp = () => {
         duration: 2000,
       });
       dispatch(login(res));
-      navigate("/home");
+      navigate("/dashboard");
     } else {
       toast({
         title: "Login panalada panni",
