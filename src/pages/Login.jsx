@@ -14,12 +14,32 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [validEmail, setEmailValid] = useState(true);
+  const [validPassword, setValidPassword] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const validateEmail = (email) =>{
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateEmail(email)) {
+      setEmailValid(false);
+      return;
+    } else {
+      setEmailValid(true);
+    }
+    if (password.length < 6) {
+      setValidPassword(false);
+      return;
+    } else {
+      setValidPassword(true);
+    }
+
     const res = await signIn(email, password);
     if (res.status === "ok") {
       toast({
@@ -62,6 +82,9 @@ const Login = () => {
               placeholder="example@example.com"
               onChange={(e) => setEmail(e.target.value)}
             />
+            {!validEmail && (
+              <p className="text-red-500">Please enter a valid email address</p>
+            )}
           </div>
           <div className=" flex flex-col gap-2 mb-4">
             <Label htmlFor="password" className=" font-semibold text-[18px]">
@@ -79,18 +102,21 @@ const Login = () => {
                 onClick={() => {
                   setPasswordVisible((prev) =>!prev);
                 }}
-                disabled={password===''}
+                disabled={password === ""}
               >
-                <Icon
-                  name={passwordVisible ? "EyeOff" : "Eye"}
-                  size={24}
-                />
+                <Icon name={passwordVisible ? "EyeOff" : "Eye"} size={24} />
               </Toggle>
             </div>
+            {!validPassword && (
+              <p className="text-red-500">Password must be at least 6 characters long</p>
+            )}
           </div>
 
           <Button className=" font-semibold text-[18px] mt-2">Login</Button>
-          <p className=" text-center">Don't have an account ?<Button variant={"link"} onClick={()=>{navigate('/signup')}}>Sign Up</Button></p>
+          <p className=" text-center">
+            Don't have an account ?
+            <Button variant={"link"} onClick={() => {navigate('/signup')}}>Sign Up</Button>
+          </p>
         </form>
       </div>
     </div>

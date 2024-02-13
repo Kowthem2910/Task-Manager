@@ -18,6 +18,7 @@ const App = () => {
             <div className=" h-screen w-screen flex flex-row gap-2">
                 <Sidebar />
                 <Routes>
+                  <Route path="/" element={<Login/>} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/dashboard" element={<AuthRoutes><DashBoard /></AuthRoutes>} />

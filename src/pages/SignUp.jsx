@@ -19,22 +19,43 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [error , setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!userName.trim()){
+      setError("User Name is Required");
+      return;
+    }
+    if(!email.trim()){
+      setError("Email is Required");
+      return;
+    }
+    if(!password.trim()){
+      setError("Password is Required");
+      return;
+    }
+    if(password !== confirmPassword){
+      setError("Passwords should be same");
+      return;
+    }
+    if(password.length < 6){
+      setError("Password should be atleast 6 characters");
+      return;
+    }
     const res = await signUp(userName, email, password);
     if (res.status === "ok") {
       toast({
-        title: "Login Panniyachu",
-        description: "follow panuriya da body soda, vaa suruthi",
+        title: "Login",
+        description: "Login Successfull, Welcome to Task Manager",
         duration: 2000,
       });
       dispatch(login(res));
       navigate("/dashboard");
     } else {
       toast({
-        title: "Login panalada panni",
-        description: "password / email ae check pannu da body soda",
+        title: "Not Logged In",
+        description: "Email/Password is incorrect, Please try again",
         duration: 3000,
         variant: "destructive",
       });
@@ -127,7 +148,7 @@ const SignUp = () => {
               </Toggle>
             </div>
           </div>
-
+          {error ? <p style={{color:'red',textAlign:'center'}}>{error}</p> :<br/>}
           <Button className=" font-semibold text-[18px] mt-2">Sign Up</Button>
           <p className=" mt-0 text-center">Already have an account ?<Button variant={"link"} onClick={()=>{navigate('/login')}}>Login</Button></p>
         </form>

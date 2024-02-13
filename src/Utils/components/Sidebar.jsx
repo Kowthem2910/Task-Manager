@@ -8,7 +8,7 @@ import SideBarItem from "./SideBarItem";
 const Sidebar = () => {
   const location = useLocation();
   const isHidden =
-    location.pathname === "/login" || location.pathname === "/signup";
+    location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/";
   const [expanded, setExpanded] = useState(true);
   return (
     <div
