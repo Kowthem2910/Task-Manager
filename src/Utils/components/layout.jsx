@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { logOut } from "../../Functions/FireBaseFunctions";
-import { logout } from "../../Redux/userActions";
+import { logOut, getUsers } from "../../Functions/FireBaseFunctions";
+import { logout, getUsersList } from "../../Redux/userActions";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../ThemeProvider";
 import Icon from "../Icons";
 
 const Layout = ({children, pageName}) => {
-  const { data } = useSelector(mapStatetoProps);
+  const { user } = useSelector(mapStatetoProps);
   const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -38,23 +38,32 @@ const Layout = ({children, pageName}) => {
     }
   };
 
+  const usersList = async() =>{
+    const users = await getUsers();
+    dispatch(getUsersList(users));
+  }
+
+  useEffect(()=>{
+    usersList()
+  }, [])
+
   return (
     <div className=" flex flex-col items-center justify-start h-screen w-screen px-5 pb-5">
       <div className=" inline-flex items-start pt-4 w-full justify-between">
         <h2 className=" border-none ">{pageName}</h2>
         <div className=" w-max inline-flex items-center gap-2 justify-center">
           <Avatar
-            onclick={() => {
+            onClick={() => {
               console.log("clicked");
             }}
           >
             <AvatarImage
-              onclick={() => {
+              onClick={() => {
                 console.log("clicked");
               }}
-              src={data.photoUrl}
+              src={user.photoUrl}
             />
-            <AvatarFallback>{data.displayName}</AvatarFallback>
+            <AvatarFallback>{user.displayName}</AvatarFallback>
           </Avatar>
           <Button variant="outline" className=" inline-flex items-center gap-2" onClick={handleLogout}>
           <Icon name={"LogOut"} size={20} /> <p className=" mb-[3px]">Log out</p>
@@ -78,8 +87,11 @@ const Layout = ({children, pageName}) => {
   );
 };
 
-const mapStatetoProps = (user) => {
-  return user.user.userInfo;
+const mapStatetoProps = ({user, usersCollection}) => {
+  return {
+    user:user.userInfo.data,
+    usersCollection: usersCollection
+  };
 };
 
 export default Layout;

@@ -1,5 +1,6 @@
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, signOut, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc, setDoc, getDocs , collection } from "firebase/firestore";
 
 
 const signIn = async (email, password) => {
@@ -36,6 +37,7 @@ const signUp = async (userName, email, password) => {
       phone: user.user.phoneNumber,
       isLoggedin: true,
     };
+    await setDoc(doc(db, "Users", user.user.uid), userData);
     return { data: userData, status: "ok" }
   } catch (error) {
     return { data: error.message, status: "error" };
@@ -55,4 +57,19 @@ const logOut = async () => {
   }
 };
 
-export { signIn, signUp, logOut };
+
+const getUsers = async ()=>{
+  const resData = await getDocs(collection(db, "Users"));
+  const users = [];
+  resData.forEach((doc) => {
+    let userData ={
+      userName: doc.data().displayName,
+      email: doc.data().email,
+    }
+    users.push(userData);
+  })
+  console.log(users)
+  return users;
+}
+
+export { signIn, signUp, logOut, getUsers };

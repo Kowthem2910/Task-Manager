@@ -1,10 +1,25 @@
 
-const initalState = {
+const initalUserState = {
     userInfo:null,
     isLoggedIn:false,
 }
 
-const userReducer = (state = initalState, action) => {
+const initalUsersCollection = {
+    data:[]
+}
+
+const usersReducer = (state = initalUsersCollection, action) => {
+    switch(action.type){
+        case "GET_USERS":
+            return {
+                ...state, data:action.payload
+            }
+        default:
+            return state
+    }
+}
+
+const userReducer = (state = initalUserState, action) => {
     switch(action.type){
         case "LOGIN":
             return {
@@ -25,4 +40,4 @@ const userReducer = (state = initalState, action) => {
 
 
 
-export default userReducer;
+export {userReducer, usersReducer};

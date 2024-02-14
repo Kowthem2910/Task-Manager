@@ -6,3 +6,9 @@ export const login = (userInfo) => ({
 export const logout = () => ({
     type: 'LOGOUT',
   });
+
+
+export const getUsersList = (users) => ({
+  type:"GET_USERS", 
+  payload:users
+})

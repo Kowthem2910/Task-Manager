@@ -55,7 +55,7 @@ const SignUp = () => {
     } else {
       toast({
         title: "Not Logged In",
-        description: "Email/Password is incorrect, Please try again",
+        description: res.data,
         duration: 3000,
         variant: "destructive",
       });
