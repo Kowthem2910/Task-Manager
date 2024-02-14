@@ -63,13 +63,27 @@ const getUsers = async ()=>{
   const users = [];
   resData.forEach((doc) => {
     let userData ={
+      uid:doc.data().uid,
       userName: doc.data().displayName,
       email: doc.data().email,
     }
     users.push(userData);
   })
-  console.log(users)
   return users;
 }
 
-export { signIn, signUp, logOut, getUsers };
+
+const AddTaskToStore = async (task, id) => {
+  try {
+    const res = await setDoc(doc(db, "Tasks", id), task);
+    return {
+      code: 200,
+      status: "ok",
+      message: "Task Added Successfully",
+    };
+  } catch (error) {
+    return { code: 500, status: "error", message: error.message };
+  }
+}
+
+export { signIn, signUp, logOut, getUsers, AddTaskToStore };

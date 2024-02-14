@@ -15,7 +15,6 @@ const DashBoard = () => {
 }
 
 const mapStatetoProps = ({usersCollection}) => {
-  console.log(usersCollection)
   return usersCollection;
 }
 

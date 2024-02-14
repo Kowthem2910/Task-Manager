@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Icon from "../Icons";
 import SideBardata from "./constants";
 import SideBarItem from "./SideBarItem";
+import ToolTip from "./ToolTip";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -48,7 +49,9 @@ const Sidebar = () => {
          </div>
          <div className=" flex flex-col h-full px-2 gap-2 mt-8">
           {SideBardata.map((item)=>(
-            <SideBarItem key={item.id} item={item} active={location.pathname === item.path} expanded={expanded}/>
+            <ToolTip Content={item.title} key={item.id} expanded={expanded}>
+              <SideBarItem item={item} active={location.pathname === item.path} expanded={expanded}/>
+            </ToolTip>
           ))}
          </div>
       </nav>
