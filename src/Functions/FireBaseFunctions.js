@@ -1,6 +1,6 @@
 import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, signOut, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc, setDoc, getDocs , collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs , collection, deleteDoc } from "firebase/firestore";
 
 
 const signIn = async (email, password) => {
@@ -86,4 +86,20 @@ const AddTaskToStore = async (task, id) => {
   }
 }
 
-export { signIn, signUp, logOut, getUsers, AddTaskToStore };
+const getTaskFromStore = async () => {
+  try {
+    const Tasks = [];
+    const querySnapshot = await getDocs(collection(db, "Tasks"));
+    querySnapshot.forEach((doc) => {
+      Tasks.push(doc.data());
+    });
+    return Tasks;
+  } catch {
+    console.log("No UserId Found");
+  }
+};
+
+
+
+
+export { signIn, signUp, logOut, getUsers, AddTaskToStore, getTaskFromStore };

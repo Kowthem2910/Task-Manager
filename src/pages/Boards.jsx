@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Layout from "../Utils/components/layout";
 import Icon from "../Utils/Icons";
@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSelector } from "react-redux";
-import { AddTaskToStore } from "../Functions/FireBaseFunctions";
+import { AddTaskToStore, getTaskFromStore } from "../Functions/FireBaseFunctions";
 import { useToast } from "@/components/ui/use-toast";
 
 
@@ -54,7 +54,16 @@ const Boards = () => {
     setTaskName("");
   };
 
-  console.log(tasks, users);
+
+  const getTask = async () => {
+    const res = await getTaskFromStore();
+    console.log("inside of res: ",res);
+    setTasks(res)
+  }
+  
+  useEffect(() => {
+    getTask();
+  },[]);
 
   return (
     <Layout pageName="Boards">
