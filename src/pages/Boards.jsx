@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSelector } from "react-redux";
-import { AddTaskToStore, deleteTask, getTaskFromStore, getUsers } from "../Functions/FireBaseFunctions";
+import { AddTaskToStore, deleteTask, getTaskFromStore, getUserTasks, updateTaskStatus } from "../Functions/FireBaseFunctions";
 import { useToast } from "@/components/ui/use-toast";
 
 
@@ -19,6 +19,7 @@ const Boards = () => {
   const [selectedValue, setSelectedValue] = useState();
   const [taskName, setTaskName] = useState("");
   const {list: users}  = useSelector((state) => { return state.users});
+  const {userInfo} = useSelector((state) => { return state.user});
   const [tasks, setTasks] = useState([]);
   const {toast} = useToast();
 
@@ -63,7 +64,7 @@ const Boards = () => {
   }
   };
 
-  const getTask = async () => {
+  const getAllTasks = async () => {
     const res = await getTaskFromStore();
     setTasks(res)
   }
@@ -86,9 +87,14 @@ const Boards = () => {
       });
     }
   }
+
+  const getCurrentUserTasks = async () => {
+    const res = await getUserTasks(userInfo.uid);
+    setTasks(res)
+  }
   
   useEffect(() => {
-    getTask();
+    getCurrentUserTasks();
   },[]);
 
   return (
@@ -129,7 +135,12 @@ const Boards = () => {
             <p className=" w-[10%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800 text-center ml-[-10px]">
               {task.status}
             </p>
-            <Button variant="destructive" onClick={()=>{handleDeleteTask(task.parentId, task.taskId)}}>Delete</Button>
+            <Button onClick={()=>{updateTaskStatus(task.parentId, task.taskId, "Completed")}} >
+              <Icon name="Check" size={20} />
+            </Button>
+            <Button variant="destructive" onClick={()=>{handleDeleteTask(task.parentId, task.taskId)}}>
+              <Icon name="Trash2" size={20} />
+            </Button>
           </div>
           ))}
         </div>

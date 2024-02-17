@@ -1,6 +1,6 @@
 import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, signOut, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc, setDoc, getDocs , collection, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs , collection, deleteDoc, updateDoc } from "firebase/firestore";
 import {v4 as uuid4} from 'uuid';
 
 
@@ -77,7 +77,7 @@ const getUsers = async ()=>{
 const AddTaskToStore = async (task, id) => {
   const taskId = uuid4();
   try {
-    const res = await setDoc(doc(db, "Tasks", id, 'assignedTasks', taskId), {taskId: taskId, ...task});
+    await setDoc(doc(db, "Tasks", id, 'assignedTasks', taskId), {taskId: taskId, ...task});
     return {
       code: 200,
       status: "ok",
@@ -127,5 +127,43 @@ const deleteTask = async (parentTaskId, taskId) => {
   }
 };
 
+const getUserTasks = async (id) => {
+  try {
+    const tasks = [];
+    // Fetch the specific task document directly
+    const taskDocRef = doc(db, "Tasks", id);
+    const taskDoc = await getDoc(taskDocRef);
 
-export { signIn, signUp, logOut, getUsers, AddTaskToStore, getTaskFromStore, deleteTask };
+    if (taskDoc.exists) {
+      // If the document exists, fetch its subcollection
+      const subCollectionSnapshot = await getDocs(collection(taskDocRef, "assignedTasks"));
+      tasks.push(
+        ...subCollectionSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), parentId: id }))
+      );
+    } else {
+      console.log(`Task document with ID ${id} not found.`);
+    }
+    return tasks;
+  } catch (error) {
+    console.error("Error fetching task:", error);
+    throw error; // Re-throw the error for proper handling
+  }
+};
+
+
+const updateTaskStatus = async (parentTaskId, taskId, newStatus) => {
+  try {
+    const parentTaskRef = doc(db, "Tasks", parentTaskId);
+    const subcollectionRef = collection(parentTaskRef, "assignedTasks");
+    const taskRef = doc(subcollectionRef, taskId);
+
+    await updateDoc(taskRef, { status: newStatus });
+    console.log(`Task ${taskId} status updated to ${newStatus}`);
+  } catch (error) {
+    console.error("Error updating task status:", error);
+    throw error; // Re-throw the error for proper handling
+  }
+};
+
+
+export { signIn, signUp, logOut, getUsers, AddTaskToStore, getTaskFromStore, deleteTask, getUserTasks, updateTaskStatus };
