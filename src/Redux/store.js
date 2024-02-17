@@ -1,43 +1,18 @@
+// store.js
 
-const initalUserState = {
-    userInfo:null,
-    isLoggedIn:false,
-}
+import { createStore } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 
-const initalUsersCollection = {
-    data:[]
-}
+import rootReducer from './reducers';
 
-const usersReducer = (state = initalUsersCollection, action) => {
-    switch(action.type){
-        case "GET_USERS":
-            return {
-                ...state, data:action.payload
-            }
-        default:
-            return state
-    }
-}
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user'], // persist only 'user' state
+};
 
-const userReducer = (state = initalUserState, action) => {
-    switch(action.type){
-        case "LOGIN":
-            return {
-                ...state,
-                isLoggedIn:true,
-                userInfo:action.payload
-            }
-        case "LOGOUT":
-            return{
-                ...state,
-                isLoggedIn:false,
-                userInfo:null
-            }
-        default:
-            return state
-    }
-}
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-
-
-export {userReducer, usersReducer};
+export const store = createStore(persistedReducer);
+export const persistor = persistStore(store);

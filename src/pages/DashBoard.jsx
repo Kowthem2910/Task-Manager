@@ -1,9 +1,7 @@
 import Layout from '../Utils/components/layout'
 import React, {useEffect} from 'react'
-import {useSelector} from'react-redux'
 
 const DashBoard = () => {
-  const {data} = useSelector(mapStatetoProps);
   
 
 
@@ -14,8 +12,5 @@ const DashBoard = () => {
   )
 }
 
-const mapStatetoProps = ({usersCollection}) => {
-  return usersCollection;
-}
 
 export default DashBoard

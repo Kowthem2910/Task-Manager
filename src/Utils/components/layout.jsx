@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logOut, getUsers } from "../../Functions/FireBaseFunctions";
-import { logout, getUsersList } from "../../Redux/userActions";
+import { logoutUser, getUsersList } from "../../Redux/Actions";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../ThemeProvider";
 import Icon from "../Icons";
@@ -20,7 +20,7 @@ const Layout = ({children, pageName}) => {
   const handleLogout = async () => {
     const res = await logOut();
     if (res.code === 200) {
-      dispatch(logout);
+      dispatch(logoutUser());
       navigate("/login");
       toast({
         title: "log out panniyachu da body soda",
@@ -37,6 +37,7 @@ const Layout = ({children, pageName}) => {
       });
     }
   };
+
 
   const usersList = async() =>{
     const users = await getUsers();
@@ -87,10 +88,9 @@ const Layout = ({children, pageName}) => {
   );
 };
 
-const mapStatetoProps = ({user, usersCollection}) => {
+const mapStatetoProps = ({user}) => {
   return {
-    user:user.userInfo.data,
-    usersCollection: usersCollection
+    user:user.userInfo,
   };
 };
 

@@ -1,6 +1,7 @@
 import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword, signOut, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc, getDocs , collection, deleteDoc } from "firebase/firestore";
+import {v4 as uuid4} from 'uuid';
 
 
 const signIn = async (email, password) => {
@@ -74,8 +75,9 @@ const getUsers = async ()=>{
 
 
 const AddTaskToStore = async (task, id) => {
+  const taskId = uuid4();
   try {
-    const res = await setDoc(doc(db, "Tasks", id), task);
+    const res = await setDoc(doc(db, "Tasks", id, 'assignedTasks', taskId), {taskId: taskId, ...task});
     return {
       code: 200,
       status: "ok",
@@ -88,18 +90,42 @@ const AddTaskToStore = async (task, id) => {
 
 const getTaskFromStore = async () => {
   try {
-    const Tasks = [];
+    const tasks = [];
     const querySnapshot = await getDocs(collection(db, "Tasks"));
-    querySnapshot.forEach((doc) => {
-      Tasks.push(doc.data());
-    });
-    return Tasks;
-  } catch {
-    console.log("No UserId Found");
+    await Promise.all(
+      querySnapshot.docs.map(async (taskDoc) => {
+        const subCollectionSnapshot = await getDocs(collection(taskDoc.ref, "assignedTasks"));
+        tasks.push(
+          ...subCollectionSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), parentId: taskDoc.id }))
+        );
+      })
+    );
+    console.log(tasks[0])
+
+    return tasks;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    throw error; // Re-throw the error for proper handling
   }
 };
 
 
+const deleteTask = async (parentTaskId, taskId) => {
+  try {
+    const parentTaskRef = doc(db, "Tasks", parentTaskId);
+    const subcollectionRef = collection(parentTaskRef, "assignedTasks");
+    const taskRef = doc(subcollectionRef, taskId);
+
+    await deleteDoc(taskRef);
+    return {
+      code: 200,
+      status: "ok",
+      message: "Task Deleted Successfully",
+    };
+  } catch (error) {
+    return { code: 500, status: "error", message: error.message }; // Re-throw the error for proper handling
+  }
+};
 
 
-export { signIn, signUp, logOut, getUsers, AddTaskToStore, getTaskFromStore };
+export { signIn, signUp, logOut, getUsers, AddTaskToStore, getTaskFromStore, deleteTask };

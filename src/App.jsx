@@ -10,7 +10,7 @@ import {
   MyTasks,
 } from "./pages/Index";
 import AuthRoutes from "./Routes/AuthRoutes";
-import store, { persistor } from "./Redux/reducer";
+import  { store, persistor } from "./Redux/store";
 import { Toaster } from "./components/ui/toaster";
 import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "./Utils/ThemeProvider";

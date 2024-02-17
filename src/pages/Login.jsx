@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../Functions/FireBaseFunctions";
-import { login } from "../Redux/userActions";
+import { loginUser } from "../Redux/Actions";
 import { useToast } from "@/components/ui/use-toast";
 import { Toggle } from "@/components/ui/toggle";
 
@@ -47,7 +47,7 @@ const Login = () => {
         description: "follow panuriya da body soda, vaa suruthi",
         duration: 2000,
       });
-      dispatch(login(res));
+      dispatch(loginUser(res.data));
       navigate("/dashboard");
     } else {
       toast({

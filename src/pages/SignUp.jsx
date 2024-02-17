@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Toggle } from "@/components/ui/toggle";
 import { signUp } from "../Functions/FireBaseFunctions";
-import { login } from "../Redux/userActions";
+import { loginUser } from "../Redux/Actions";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -50,7 +50,7 @@ const SignUp = () => {
         description: "Login Successfull, Welcome to Task Manager",
         duration: 2000,
       });
-      dispatch(login(res));
+      dispatch(loginUser(res));
       navigate("/dashboard");
     } else {
       toast({
