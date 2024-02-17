@@ -38,7 +38,7 @@ const Boards = () => {
       ...prev,
       taskPayload,
     ]);
-
+    setTaskName("");
     const res = await AddTaskToStore(taskPayload, userUid)
     if (res.status === "ok") {
       toast({
@@ -71,13 +71,13 @@ const Boards = () => {
 
   const handleDeleteTask = async (parentId,taskId) => {
     const res = await deleteTask(parentId,taskId);
-    setTasks((prev) => prev.filter((task) => task.taskId!== taskId));
     if (res.status === "ok") {
       toast({
         title: "Deleting Task",
         description: "Deleted Task Successfully",
         duration: 2000,
       });
+      setTasks((prev) => prev.filter((task) => task.taskId!== taskId));
     }else{
       toast({
         title: "Error",
@@ -91,6 +91,11 @@ const Boards = () => {
   const getCurrentUserTasks = async () => {
     const res = await getUserTasks(userInfo.uid);
     setTasks(res)
+  }
+
+  const handleUpdateTaskStatus = async (parentId,taskId,status) => {
+    updateTaskStatus(parentId,taskId, status);
+    setTasks((prev) => prev.map((task) => task.taskId === taskId? {...task, status} : task));
   }
   
   useEffect(() => {
@@ -135,7 +140,7 @@ const Boards = () => {
             <p className=" w-[10%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800 text-center ml-[-10px]">
               {task.status}
             </p>
-            <Button onClick={()=>{updateTaskStatus(task.parentId, task.taskId, "Completed")}} >
+            <Button onClick={()=>{handleUpdateTaskStatus(task.parentId, task.taskId, "Completed")}} disabled={task.status === "Completed"}>
               <Icon name="Check" size={20} />
             </Button>
             <Button variant="destructive" onClick={()=>{handleDeleteTask(task.parentId, task.taskId)}}>
