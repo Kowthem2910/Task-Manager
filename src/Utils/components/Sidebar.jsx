@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "../Icons";
-import SideBardata from "./constants";
+import {SideBardata} from "./constants";
 import SideBarItem from "./SideBarItem";
 import ToolTip from "./ToolTip";
 

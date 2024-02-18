@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 
 import React, { useState } from "react";
+import Icon from "@/Utils/Icons";
 
 export function TableComponent({ columns, data, isLoading }) {
   const [sorting, setSorting] = useState([]);
@@ -26,6 +27,9 @@ export function TableComponent({ columns, data, isLoading }) {
     initialState: {
       hiddenColumns: ["id"],
       sortBy: [{ dueDate: "dueDate", desc: true }],
+      pagination: {
+        pageSize: 12,
+      },
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -39,13 +43,21 @@ export function TableComponent({ columns, data, isLoading }) {
   return (
     <>
       <div className="h-full w-full">
-        <Table defaultpagesize={20}>
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{
+                        width:
+                          header.getSize() !== 150
+                            ? header.getSize()
+                            : undefined,
+                      }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -58,8 +70,18 @@ export function TableComponent({ columns, data, isLoading }) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="h-auto flex-1 w-full">
-            {table.getRowModel().rows?.length ? (
+          <TableBody className="h-auto w-full ">
+            {isLoading ? (
+              <TableRow className=" hover:bg-transparent">
+                <TableCell colSpan={columns.length}>
+                  <div className=" h-fit w-fill flex items-center justify-center">
+                    <div className=" animate-spin">
+                      <Icon name="Loader2" size={30} />
+                    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -88,7 +110,7 @@ export function TableComponent({ columns, data, isLoading }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4 m-4 bg-blue-400 w-full px-5">
+      <div className="flex items-center justify-end space-x-2 py-4 m-4 w-full px-5">
         <Button
           variant="outline"
           size="sm"
