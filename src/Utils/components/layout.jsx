@@ -9,13 +9,12 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../ThemeProvider";
 import Icon from "../Icons";
 
-const Layout = ({children, pageName}) => {
+const Layout = ({ children, pageName }) => {
   const { user } = useSelector(mapStatetoProps);
   const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
-
 
   const handleLogout = async () => {
     const res = await logOut();
@@ -38,36 +37,31 @@ const Layout = ({children, pageName}) => {
     }
   };
 
-
-  const usersList = async() =>{
+  const usersList = async () => {
     const users = await getUsers();
     dispatch(getUsersList(users));
-  }
+  };
 
-  useEffect(()=>{
-    usersList()
-  }, [])
+  useEffect(() => {
+    usersList();
+  }, []);
 
   return (
     <div className=" flex flex-col items-center justify-start h-screen w-screen px-5 pb-5 overflow-x-hidden">
       <div className=" inline-flex items-start pt-4 w-full justify-between">
         <h2 className=" border-none ">{pageName}</h2>
         <div className=" w-max inline-flex items-center gap-2 justify-center">
-          <Avatar
-            onClick={() => {
-              console.log("clicked");
-            }}
-          >
-            <AvatarImage
-              onClick={() => {
-                console.log("clicked");
-              }}
-              src={user.photoUrl}
-            />
+          <Avatar>
+            <AvatarImage src={user.photoUrl} />
             <AvatarFallback>{user.displayName}</AvatarFallback>
           </Avatar>
-          <Button variant="outline" className=" inline-flex items-center gap-2" onClick={handleLogout}>
-          <Icon name={"LogOut"} size={20} /> <p className=" mb-[3px]">Log out</p>
+          <Button
+            variant="outline"
+            className=" inline-flex items-center gap-2"
+            onClick={handleLogout}
+          >
+            <Icon name={"LogOut"} size={20} />{" "}
+            <p className=" mb-[3px]">Log out</p>
           </Button>
           <Button
             variant="outline"
@@ -81,16 +75,16 @@ const Layout = ({children, pageName}) => {
         </div>
       </div>
       {/* Content */}
-      <div className=" w-full flex flex-col items-center justify-start gap-4 bg-blue-100  dark:bg-slate-800  mt-4 rounded-lg h-full" >
+      <div className=" w-full flex flex-col items-center justify-start gap-4 bg-blue-100  dark:bg-slate-900  mt-4 rounded-lg h-full">
         {children}
       </div>
     </div>
   );
 };
 
-const mapStatetoProps = ({user}) => {
+const mapStatetoProps = ({ user }) => {
   return {
-    user:user.userInfo,
+    user: user.userInfo,
   };
 };
 

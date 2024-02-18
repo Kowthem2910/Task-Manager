@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import Layout from "../Utils/components/layout";
-import Icon from "../Utils/Icons";
+import Layout from "@/Utils/components/layout";
+import Icon from "@/Utils/Icons";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -27,12 +27,16 @@ const Boards = () => {
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue!== "") {
     const userUid = users?.find((user) => user.email === selectedValue)?.uid
+    const userName = users?.find((user) => user.email === selectedValue)?.userName;
+
+    
     const taskPayload= {
       name: taskName,
+      userName: userName,
       assignedTo: selectedValue,
       assignedToUid:userUid,
       dueDate: new Date().toISOString(),
-      status:"Pending"
+      status:"Assigned"
     }
     setTasks((prev) => [
       ...prev,

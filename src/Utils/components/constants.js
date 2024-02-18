@@ -25,4 +25,22 @@ const SideBardata = [
     },
 ]
 
-export default SideBardata;
+const taskStatusOptions = [
+    {
+        id:1,
+        value:'Assigned'
+    },
+    {
+        id:2,
+        value:'In Progress'
+    },{
+        id:3,
+        value:'Completed'
+    },{
+        id:4,
+        value:'backlog'
+    },
+
+]
+
+export { SideBardata, taskStatusOptions};
