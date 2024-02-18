@@ -27,8 +27,11 @@ const Boards = () => {
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue!== "") {
     const userUid = users?.find((user) => user.email === selectedValue)?.uid
+    const userName = users?.find((user) => user.email === selectedValue)?.userName;
+    console.log(userName)
     const taskPayload= {
       name: taskName,
+      userName: userName,
       assignedTo: selectedValue,
       assignedToUid:userUid,
       dueDate: new Date().toISOString(),
