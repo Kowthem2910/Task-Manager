@@ -108,7 +108,6 @@ const Boards = () => {
   
   useEffect(() => {
     getAllTasks();
-    getCurrentUserTasks();
   },[]);
 
   return (
