@@ -14,10 +14,11 @@ const MyTasks = () => {
 
 
   const handleGetTasks = async () => {
-    setIsLoading(true)
-    const res = await getTaskFromStore()
-    setTasks(res)
-    setIsLoading(false)
+    setIsLoading(true);
+    const res = await getTaskFromStore();
+    console.log(res);
+    setTasks(res);
+    setIsLoading(false);
   }
 
   
@@ -39,13 +40,19 @@ const MyTasks = () => {
       });
     }
   }
+
+  const getAllTasks = async () => {
+    const res = await getTaskFromStore();
+    console.log("Tasks from store:", res); 
+    setTasks(res || []); 
+  }
   
   const handleUpdateTaskStatus = async (parentId,taskId,status) => {
     const res = await updateTaskStatus(parentId,taskId, status);
     if (res.status === "ok") {
       toast({
         title: "Update Task Status",
-        description: res.message,
+        description: "Success",
         duration: 2000,
       });
     setTasks((prev) => prev.map((task) => task.taskId === taskId? {...task, status} : task));
@@ -74,4 +81,4 @@ const MyTasks = () => {
   )
 }
 
-export default MyTasks
+export default MyTasks;

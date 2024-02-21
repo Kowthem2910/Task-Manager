@@ -13,6 +13,7 @@ import {
   collection,
   deleteDoc,
   updateDoc,
+  collectionGroup,
 } from "firebase/firestore";
 import { v4 as uuid4 } from "uuid";
 
@@ -105,34 +106,47 @@ const AddTaskToStore = async (task, id) => {
 const getTaskFromStore = async () => {
   try {
     const tasks = [];
-    const querySnapshot = await getDocs(collection(db, "Tasks"));
-    await Promise.all(
-      querySnapshot.docs.map(async (taskDoc) => {
-        const subCollectionSnapshot = await getDocs(
-          collection(taskDoc.ref, "assignedTasks")
-        );
-        tasks.push(
-          ...subCollectionSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-            parentId: taskDoc.id,
-          }))
-        );
-      })
-    );
-
+    const querySnapshot = await getDocs(collectionGroup(db, "assignedTasks"));
+    console.log("The task is:"+querySnapshot);
+    tasks.push(
+      ...querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        parentId: doc.data().assignedToUid,
+      }))
+    )
+    // await Promise.all( 
+    //   querySnapshot.docs.map(async (taskDoc) => {
+    //     console.log(taskDoc);
+    //     const subCollectionSnapshot = await getDocs(
+    //       collection(taskDoc.ref, "assignedTasks")
+    //     );
+    //     tasks.push(
+    //       ...subCollectionSnapshot.docs.map((doc) => ({
+    //         id: doc.id,
+    //         ...doc.data(),
+    //         parentId: taskDoc.id,
+    //       }))
+    //     );
+    //   })
+    // );
+    console.log(tasks);
     return tasks;
   } catch (error) {
     console.log(error);
+    throw error; 
   }
 };
 
+
 const deleteTask = async (parentTaskId, taskId) => {
   try {
+    console.log(parentTaskId+" "+taskId);
     const parentTaskRef = doc(db, "Tasks", parentTaskId);
     const subcollectionRef = collection(parentTaskRef, "assignedTasks");
+    console.log("Delete:"+subcollectionRef+" "+taskId);
     const taskRef = doc(subcollectionRef, taskId);
-
+    console.log(taskRef);
     await deleteDoc(taskRef);
     return {
       code: 200,
