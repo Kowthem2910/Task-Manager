@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/Utils/components/layout";
 import Icon from "@/Utils/Icons";
 import { Input } from "@/components/ui/input";
+import { Dialog } from "../components/ui/dialog";
 import {
   Select,
   SelectTrigger,
@@ -70,10 +71,13 @@ const Boards = () => {
 
   const getAllTasks = async () => {
     const res = await getTaskFromStore();
-    setTasks(res)
+    console.log("Tasks from store:", res); 
+    setTasks(res || []); 
   }
+  
 
   const handleDeleteTask = async (parentId,taskId) => {
+    console.log(parentId+" "+taskId);
     const res = await deleteTask(parentId,taskId);
     if (res.status === "ok") {
       toast({
@@ -103,6 +107,7 @@ const Boards = () => {
   }
   
   useEffect(() => {
+    getAllTasks();
     getCurrentUserTasks();
   },[]);
 
@@ -133,7 +138,7 @@ const Boards = () => {
           </Button>
         </div>
         <div className=" flex flex-col gap-2  w-full min-h-max mt-3 overflow-y-scroll overflow-x-hidden">
-          {tasks.map((task) => (
+          {tasks?.map((task) => (
             <div className=" flex flex-row items-center gap-3 w-full dark:bg-slate-700 bg-blue-400 h-[70px] p-2 rounded-md " key={task.taskId}>
             <h4 className=" w-[60%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
               {task.name}
