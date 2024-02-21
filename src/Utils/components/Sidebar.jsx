@@ -11,7 +11,7 @@ import { getUsers } from "../../Functions/FireBaseFunctions";
 
 const mapStatetoProps = ({ user }) => {
   return {
-    users: user.list,
+    user: user.userInfo,
   };
 };
 
@@ -29,7 +29,7 @@ const Sidebar = () => {
   
 
 
-  const { users } = useSelector(mapStatetoProps);
+  const { user } = useSelector(mapStatetoProps);
 
   const usersList = async () => {
     const users = await getUsers();
@@ -73,8 +73,8 @@ const Sidebar = () => {
           </Button>
          </div>
          <div className=" flex flex-col h-full px-2 gap-2 mt-8">
-          {console.log("user:",users)}
-         {!users?.admin ? (
+          {console.log("user:",user?.email)}
+         {!(user?.email=="kowthem3@gmail.com") ? (
         <>
         {SideBardata1.map((item)=>(
           <ToolTip Content={item.title} key={item.id} expanded={expanded}>
