@@ -51,9 +51,9 @@ const Layout = ({ children, pageName }) => {
       <div className=" inline-flex items-start pt-4 w-full justify-between">
         <h2 className=" border-none ">{pageName}</h2>
         <div className=" w-max inline-flex items-center gap-2 justify-center">
+            <div>{console.log(user)}</div>
           <Avatar>
             <AvatarImage src={user.photoUrl} />
-            <AvatarFallback>{user.displayName}</AvatarFallback>
           </Avatar>
           <Button
             variant="outline"

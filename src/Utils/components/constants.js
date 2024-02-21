@@ -24,6 +24,26 @@ const SideBardata = [
         "icon": "Settings",
     },
 ]
+const SideBardata1 = [
+    {
+        "id": 1,
+        "title": "Dashboard",
+        "path": "/dashboard",
+        "icon": "LayoutDashboard",
+    },
+    {
+        "id": 2,
+        "title": "My Tasks",
+        "path": "/my-tasks",
+        "icon": "ListChecks",
+    },
+    {
+        "id": 3,
+        "title": "Settings",
+        "path": "/settings",
+        "icon": "Settings",
+    },
+]
 
 const taskStatusOptions = [
     {
@@ -43,4 +63,4 @@ const taskStatusOptions = [
 
 ]
 
-export { SideBardata, taskStatusOptions};
+export { SideBardata, taskStatusOptions, SideBardata1};

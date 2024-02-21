@@ -2,12 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Icon from "../Icons";
-import {SideBardata} from "./constants";
+import {SideBardata, SideBardata1} from "./constants";
 import SideBarItem from "./SideBarItem";
 import ToolTip from "./ToolTip";
+import {useSelector,useDispatch} from "react-redux";
+import {getUsersList} from "../../Redux/Actions";
+import { getUsers } from "../../Functions/FireBaseFunctions";
+
+const mapStatetoProps = ({ user }) => {
+  return {
+    users: user.list,
+  };
+};
 
 const Sidebar = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const isHidden =
     location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/";
   const [expanded, setExpanded] = useState(true);
@@ -16,6 +26,21 @@ const Sidebar = () => {
     window.innerWidth,
     window.innerHeight,
   ]);
+  
+
+
+  const { users } = useSelector(mapStatetoProps);
+
+  const usersList = async () => {
+    const users = await getUsers();
+    console.log("userlist",getUsersList(users));
+    dispatch(getUsersList(users));
+  };
+
+
+  useEffect(() => {
+    usersList();
+  }, []);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -48,11 +73,25 @@ const Sidebar = () => {
           </Button>
          </div>
          <div className=" flex flex-col h-full px-2 gap-2 mt-8">
+          {console.log("user:",users)}
+         {!users?.admin ? (
+        <>
+        {SideBardata1.map((item)=>(
+          <ToolTip Content={item.title} key={item.id} expanded={expanded}>
+            <SideBarItem item={item} active={location.pathname === item.path} expanded={expanded}/>
+          </ToolTip>
+        ))}
+        </>
+      ) : (
+        <>
           {SideBardata.map((item)=>(
-            <ToolTip Content={item.title} key={item.id} expanded={expanded}>
-              <SideBarItem item={item} active={location.pathname === item.path} expanded={expanded}/>
-            </ToolTip>
-          ))}
+          <ToolTip Content={item.title} key={item.id} expanded={expanded}>
+            <SideBarItem item={item} active={location.pathname === item.path} expanded={expanded}/>
+          </ToolTip>
+        ))}
+        </>
+      )}
+          
          </div>
       </nav>
     </div>

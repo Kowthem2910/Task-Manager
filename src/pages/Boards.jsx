@@ -15,6 +15,12 @@ import { useSelector } from "react-redux";
 import { AddTaskToStore, deleteTask, getTaskFromStore, getUserTasks, updateTaskStatus } from "../Functions/FireBaseFunctions";
 import { useToast } from "@/components/ui/use-toast";
 
+const mapStatetoProps = ({ user }) => {
+  return {
+    user: user.userInfo,
+  };
+};
+
 
 const Boards = () => {
   const [selectedValue, setSelectedValue] = useState();
@@ -23,6 +29,7 @@ const Boards = () => {
   const {userInfo} = useSelector((state) => { return state.user});
   const [tasks, setTasks] = useState([]);
   const {toast} = useToast();
+  const { user } = useSelector(mapStatetoProps);
 
 
   const handleAddTask = async () => {
@@ -109,6 +116,7 @@ const Boards = () => {
   useEffect(() => {
     getAllTasks();
   },[]);
+
 
   return (
     <Layout pageName="Boards">

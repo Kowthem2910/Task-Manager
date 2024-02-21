@@ -83,7 +83,6 @@ const getColumns = (handleDeleteTask, handleUpdateTaskStatus) => {
       accessorKey: "taskId",
       header: "",
       cell: ({ row }) => {
-        console.log(row);
         return (
           <Button
             className=" h-[35px] p-4"
