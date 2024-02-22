@@ -33,7 +33,6 @@ const Sidebar = () => {
 
   const usersList = async () => {
     const users = await getUsers();
-    console.log("userlist",getUsersList(users));
     dispatch(getUsersList(users));
   };
 
@@ -73,7 +72,6 @@ const Sidebar = () => {
           </Button>
          </div>
          <div className=" flex flex-col h-full px-2 gap-2 mt-8">
-          {console.log("user:",user?.email)}
          {!(user?.email=="kowthem3@gmail.com") ? (
         <>
         {SideBardata1.map((item)=>(

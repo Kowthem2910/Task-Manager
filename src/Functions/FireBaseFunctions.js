@@ -76,7 +76,6 @@ const getUsers = async () => {
   const resData = await getDocs(collection(db, "Users"));
   const users = [];
   resData.forEach((doc) => {
-    console.log("doc is",doc.data());
     let userData = {
       uid: doc.data().uid,
       userName: doc.data().displayName,
@@ -84,7 +83,6 @@ const getUsers = async () => {
     };
     users.push(userData);
   });
-  console.log("user is:",users);
   return users;
 };
 

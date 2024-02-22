@@ -22,13 +22,13 @@ const Layout = ({ children, pageName }) => {
       dispatch(logoutUser());
       navigate("/login");
       toast({
-        title: "log out panniyachu da body soda",
+        title: "Login Successful",
         description: res.message,
         duration: 2000,
       });
     } else {
       toast({
-        title: "Logout panalada panni",
+        title: "Logout Failed",
         description: res.message,
         status: "failure",
         duration: 3000,
@@ -51,7 +51,7 @@ const Layout = ({ children, pageName }) => {
       <div className=" inline-flex items-start pt-4 w-full justify-between">
         <h2 className=" border-none ">{pageName}</h2>
         <div className=" w-max inline-flex items-center gap-2 justify-center">
-            <div>{console.log(user)}</div>
+            <div>{user.diplayName}</div>
           <Avatar>
             <AvatarImage src={user.photoUrl} />
           </Avatar>
