@@ -161,12 +161,10 @@ const deleteTask = async (parentTaskId, taskId) => {
 const getUserTasks = async (id) => {
   try {
     const tasks = [];
-    // Fetch the specific task document directly
     const taskDocRef = doc(db, "Tasks", id);
     const taskDoc = await getDoc(taskDocRef);
 
     if (taskDoc.exists) {
-      // If the document exists, fetch its subcollection
       const subCollectionSnapshot = await getDocs(
         collection(taskDocRef, "assignedTasks")
       );
