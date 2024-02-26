@@ -1,6 +1,9 @@
 const nodemailer = require("nodemailer");
 
 const mail = async (req, res) => {
+  console.log(req)
+  const { to, subject, text} = req.body;
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -11,20 +14,19 @@ const mail = async (req, res) => {
 
   const message = {
     from: 'wwwkowthem073@gmail.com', 
-    to: "",
-    subject: "Task Assigned",
-    text: "Hello world?", 
-    html: "<b>Hello world?</b>", 
+    to: to,
+    subject: subject,
+    text: text,
   }
 
   try {
-      const info = await transporter.sendMail(message);
-      console.log("Message sent: %s", info.messageId);
-    } catch (error) {
-      console.error('Error sending email:', error);
-      return res.status(500).json({ success: false, message: 'Error sending verification email' });
-    }
-  //res.status(201).json("success");
+    const info = await transporter.sendMail(message);
+    console.log("Message sent: %s", info.messageId);
+    res.status(200).json({ success: true, message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ success: false, message: 'Error sending email' });
+  }
 };
 
 module.exports = {
