@@ -2,8 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../Utils/components/layout'
 import { TableComponent } from './Table/Table'
 import  getColumns  from './Table/columns'
-import { getTaskFromStore, deleteTask, updateTaskStatus } from '../Functions/FireBaseFunctions'
+import {useDispatch, useSelector} from "react-redux";
+import { getTaskFromStore, deleteTask, updateTaskStatus, getUsers, getUserTasks } from '../Functions/FireBaseFunctions'
 import { useToast } from "@/components/ui/use-toast";
+import { getUsersList } from '@/Redux/Actions';
+
+const mapStatetoProps = ({ user }) => {
+  return {
+    user: user.userInfo,
+  };
+};
 
 const MyTasks = () => {
 
@@ -11,17 +19,36 @@ const MyTasks = () => {
   const [columns, setColumns] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const {toast} = useToast();
+  const dispatch = useDispatch();
 
 
+  
+  const { user } = useSelector(mapStatetoProps);
+
+  console.log(user)
+  
+  
+  const usersList = async () => {
+    const users = await getUsers();
+    dispatch(getUsersList(users));
+  };
+  
+  
+  useEffect(() => {
+    usersList();
+  }, []);
+  
   const handleGetTasks = async () => {
     setIsLoading(true);
-    const res = await getTaskFromStore();
+    var res;
+    if(!(user?.email == "kowthem3@gmail.com"))
+      res = await getUserTasks(user?.uid)
+    else 
+      res = await getTaskFromStore();
     console.log(res);
     setTasks(res);
     setIsLoading(false);
   }
-
-  
   const handleDeleteTask = async (parentId,taskId) => {
     const res = await deleteTask(parentId,taskId);
     if (res.status === "ok") {
