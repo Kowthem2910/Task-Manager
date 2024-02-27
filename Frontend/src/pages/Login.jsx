@@ -43,16 +43,16 @@ const Login = () => {
     const res = await signIn(email, password);
     if (res.status === "ok") {
       toast({
-        title: "Login Panniyachu",
-        description: "follow panuriya da body soda, vaa suruthi",
+        title: "Login Successful",
+        description: "Successfully Logged in",
         duration: 2000,
       });
       dispatch(loginUser(res.data));
       navigate("/dashboard");
     } else {
       toast({
-        title: "Login panalada panni",
-        description: "password / email ae check pannu da body soda",
+        title: "Login Failed",
+        description: "Invalid Email or Password",
         duration: 3000,
         variant: "destructive",
       });
