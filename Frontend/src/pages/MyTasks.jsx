@@ -41,7 +41,7 @@ const MyTasks = () => {
   const handleGetTasks = async () => {
     setIsLoading(true);
     var res;
-    if(!(user?.email == "kowthem3@gmail.com"))
+    if(!(user?.email == "admin@vsb.com"))
       res = await getUserTasks(user?.uid)
     else 
       res = await getTaskFromStore();

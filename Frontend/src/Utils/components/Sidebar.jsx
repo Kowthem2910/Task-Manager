@@ -72,7 +72,7 @@ const Sidebar = () => {
           </Button>
          </div>
          <div className=" flex flex-col h-full px-2 gap-2 mt-8">
-         {!(user?.email=="kowthem3@gmail.com") ? (
+         {!(user?.email=="admin@vsb.com") ? (
         <>
         {SideBardata1.map((item)=>(
           <ToolTip Content={item.title} key={item.id} expanded={expanded}>
