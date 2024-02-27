@@ -13,7 +13,7 @@ const mail = async (req, res) => {
   });
 
   const message = {
-    from: 'wwwkowthem073@gmail.com', 
+    from: 'admin@vsb.com', 
     to: to,
     subject: subject,
     text: text,
