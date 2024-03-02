@@ -54,7 +54,7 @@ const Boards = () => {
         assignedTo: selectedValue,
         assignedToUid: userUid,
         dueDate: new Date().toISOString(),
-        status: "Assigned",
+        status: "Task Assigned",
       };
       setTasks((prev) => [...prev, taskPayload]);
       setTaskName("");
@@ -90,7 +90,6 @@ const Boards = () => {
   };
 
   const handleDeleteTask = async (parentId, taskId) => {
-    console.log(parentId + " " + taskId);
     const res = await deleteTask(parentId, taskId);
     if (res.status === "ok") {
       toast({
@@ -132,7 +131,6 @@ const Boards = () => {
       .catch((error) => {
         console.error("Error sending email:", error);
       });
-    console.log(task);
   };
 
   useEffect(() => {
@@ -188,11 +186,11 @@ const Boards = () => {
                   handleUpdateTaskStatus(
                     task.parentId,
                     task.taskId,
-                    "Completed",
+                    "Task Sent",
                     task
                   );
                 }}
-                disabled={task.status === "Completed"}
+                disabled={task.status === "Task Sent"}
               >
                 <Icon name="Check" size={20} />
               </Button>
