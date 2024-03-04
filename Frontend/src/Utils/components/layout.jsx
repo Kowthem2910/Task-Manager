@@ -38,8 +38,8 @@ const Layout = ({ children, pageName }) => {
   };
 
   const usersList = async () => {
-    const users = await getUsers();
-    dispatch(getUsersList(users));
+    const user = await getUsers();
+    dispatch(getUsersList(user));
   };
 
   useEffect(() => {

@@ -85,7 +85,6 @@ const Boards = () => {
 
   const getAllTasks = async () => {
     const res = await getTaskFromStore();
-    console.log("Tasks from store:", res);
     setTasks(res || []);
   };
 

@@ -107,7 +107,6 @@ const getTaskFromStore = async () => {
   try {
     const tasks = [];
     const querySnapshot = await getDocs(collectionGroup(db, "assignedTasks"));
-    console.log("The task is:"+querySnapshot);
     tasks.push(
       ...querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -130,7 +129,6 @@ const getTaskFromStore = async () => {
     //     );
     //   })
     // );
-    console.log(tasks);
     return tasks;
   } catch (error) {
     console.log(error);
