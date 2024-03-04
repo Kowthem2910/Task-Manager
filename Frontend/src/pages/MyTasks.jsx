@@ -24,8 +24,6 @@ const MyTasks = () => {
 
   
   const { user } = useSelector(mapStatetoProps);
-
-  console.log(user)
   
   
   const usersList = async () => {

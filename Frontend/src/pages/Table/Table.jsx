@@ -28,7 +28,7 @@ export function TableComponent({ columns, data, isLoading }) {
       hiddenColumns: ["id"],
       sortBy: [{ dueDate: "dueDate", desc: true }],
       pagination: {
-        pageSize: 12,
+        pageSize: 10,
       },
     },
     getCoreRowModel: getCoreRowModel(),

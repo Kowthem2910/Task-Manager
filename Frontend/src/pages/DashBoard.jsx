@@ -1,13 +1,22 @@
 import Layout from '../Utils/components/layout'
-import React, {useEffect} from 'react'
+import React, {useEffect,useState} from 'react';
+import { useSelector } from 'react-redux';
 
-const DashBoard = () => {
+const mapStatetoProps = ({ user }) => {
+  return {
+    user: user.userInfo,
+  };
+};
   
 
-
+const DashBoard = () => {
+  const { user } = useSelector(mapStatetoProps);
   return (
     <Layout pageName="DashBoard">
-      <div className=' w-full h-full p-2'>DashBoard</div>
+      <div className=' w-full h-20px p-2'>
+        {user.displayName ? `Hello, ${user.displayName}!` : "Hello!"}
+      </div>
+      <div>Welcome to your Dashboard</div>
     </Layout>
   )
 }
