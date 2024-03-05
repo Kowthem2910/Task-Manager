@@ -28,7 +28,7 @@ export function TableComponent({ columns, data, isLoading }) {
       hiddenColumns: ["id"],
       sortBy: [{ dueDate: "dueDate", desc: true }],
       pagination: {
-        pageSize: 12,
+        pageSize: 7,
       },
     },
     getCoreRowModel: getCoreRowModel(),
@@ -110,7 +110,7 @@ export function TableComponent({ columns, data, isLoading }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4 m-4 w-full px-5">
+      <div className="flex items-center justify-end space-x-2 py-2 m-4 w-full px-5">
         <Button
           variant="outline"
           size="sm"

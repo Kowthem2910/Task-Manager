@@ -24,8 +24,6 @@ const MyTasks = () => {
 
   
   const { user } = useSelector(mapStatetoProps);
-
-  console.log(user)
   
   
   const usersList = async () => {
@@ -41,7 +39,7 @@ const MyTasks = () => {
   const handleGetTasks = async () => {
     setIsLoading(true);
     var res;
-    if(!(user?.email == "admin@vsb.com"))
+    if(!(user?.email == "vsbec2002@gmail.com"))
       res = await getUserTasks(user?.uid)
     else 
       res = await getTaskFromStore();
