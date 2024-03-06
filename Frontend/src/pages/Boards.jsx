@@ -57,10 +57,14 @@ const Boards = () => {
   });
   const [tasks, setTasks] = useState([]);
   const { toast } = useToast();
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState();
 
   const handleDateChange = (newDate) => {
-    setDate(newDate); // Update the state with the new date
+    const date1 = new Date(newDate);
+    const formattedDate = date1.toISOString();
+    setDate(formattedDate); 
+    console.log(formattedDate)
+    console.log(date)
   };
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue !== "") {
@@ -74,7 +78,7 @@ const Boards = () => {
         userName: userName,
         assignedTo: selectedValue,
         assignedToUid: userUid,
-        dueDate: new Date().toISOString(),
+        dueDate: date,
         status: "Task Assigned",
       };
       setTasks((prev) => [...prev, taskPayload]);
@@ -230,7 +234,8 @@ const Boards = () => {
                       <Calendar
                         mode="single"
                         selected={date}
-                        onSelect={setDate}
+                        handleDateChange={handleDateChange}
+                        // onSelect={setDate}
                         initialFocus
                       />
                     </PopoverContent>
