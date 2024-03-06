@@ -3,7 +3,19 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/Utils/components/layout";
 import Icon from "@/Utils/Icons";
 import { Input } from "@/components/ui/input";
-import { Dialog } from "../components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../components/ui/dialog";
 import {
   Select,
   SelectTrigger,
@@ -11,6 +23,12 @@ import {
   SelectContent,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useSelector } from "react-redux";
 import {
   AddTaskToStore,
@@ -39,8 +57,11 @@ const Boards = () => {
   });
   const [tasks, setTasks] = useState([]);
   const { toast } = useToast();
-  const { user } = useSelector(mapStatetoProps);
+  const [date, setDate] = useState(new Date());
 
+  const handleDateChange = (newDate) => {
+    setDate(newDate); // Update the state with the new date
+  };
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue !== "") {
       const userUid = users?.find((user) => user.email === selectedValue)?.uid;
@@ -123,7 +144,10 @@ const Boards = () => {
       text: task?.name,
     };
     axios
-      .post("https://vsb-task-manager-backend.vercel.app/api/user/mail", payload)
+      .post(
+        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
+        payload
+      )
       .then((response) => {
         console.log("Email sent successfully");
       })
@@ -140,30 +164,86 @@ const Boards = () => {
     <Layout pageName="Boards">
       <div className=" h-full w-full flex flex-col p-3 items-start justify-start ">
         <div className=" h-[50px] rounded-md w-full flex flex-row items-center gap-3">
-          <Input
-            placeholder="Enter Task Details"
-            onChange={(e) => setTaskName(e.target.value)}
-            value={taskName}
-            className="w-full"
-          />
-          <Select
-            onValueChange={(e) => setSelectedValue(e)}
-            value={selectedValue}
-          >
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Select User" />
-            </SelectTrigger>
-            <SelectContent>
-              {users?.map((user) => (
-                <SelectItem key={user.email} value={user.email}>
-                  {user.userName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button flex className="gap-2 h-[36px]" onClick={handleAddTask}>
-            <Icon name="PlusCircle" size={20} /> Add Task{" "}
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="gap-2 h-[36px]">
+                <Icon name="PlusCircle" size={20} /> Add Task{" "}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Task Assigner</DialogTitle>
+                <DialogDescription>
+                  Assign Task to the user here.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Select
+                    onValueChange={(e) => setSelectedValue(e)}
+                    value={selectedValue}
+                  >
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Select person" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {users?.map((user) => (
+                        <SelectItem key={user.email} value={user.email}>
+                          {user.userName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right ">
+                    Task Name
+                  </Label>
+                  <Input
+                    placeholder="Enter Task Details"
+                    onChange={(e) => setTaskName(e.target.value)}
+                    value={taskName}
+                    className="w-[280px]"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right ">
+                    Due Date
+                  </Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[280px] justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit" onClick={handleAddTask}>
+                  Confirm
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
         <div className=" flex flex-col gap-2  w-full min-h-max mt-3 overflow-y-scroll overflow-x-hidden">
           {tasks?.map((task) => (
