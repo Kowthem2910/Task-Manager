@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { PieChart } from "@mui/x-charts";
 import { getTaskFromStore, getUserTasks } from "@/Functions/FireBaseFunctions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mapStatetoProps = ({ user }) => {
   return {
@@ -108,19 +109,33 @@ const DashBoard = () => {
 
   return (
     <Layout pageName="DashBoard">
-      <div className=" w-full  p-2">
-        {user.displayName ? `Hello, ${user.displayName}!` : "Hello!"}
+      <div className=" w-full  p-4 px-8 text-xl">
+        <div className="flex gap-4 items-center">
+          <Avatar>
+            <AvatarImage src={user.photoUrl} />
+          </Avatar>
+          <div>
+            <div className="text-2xl font-bold">
+              {user.displayName ? `Hello, ${user.displayName}!` : "Hello!"}
+            </div>
+            <div className="text-sm text-gray-500">
+              {user.email ? `${user.email}` : "Hello!"}
+            </div>
+          </div>
+        </div>
       </div>
-      <div>Welcome to your Dashboard</div>
-      <div className="flex justify-around w-full ">
-        <div className="">
-          <h2>Current Month</h2>
+      <div></div>
+      <div className="flex flex-wrap gap-4 justify-around w-full ">
+        <div className="bg-blue-300 p-4 rounded-3xl border-4 border-blue-800">
+          <h2 className="p-4 text-2xl text-blue-900 font-semibold border-b-2 border-blue-900 flex justify-between">
+            Task Report this Month <div className="animate-bounce ">👇</div>
+          </h2>
           <PieChart
             series={[
               {
                 data: [...pieChartDataCurrentMonth],
-                innerRadius: 30,
-                outerRadius: 200,
+                innerRadius: 50,
+                outerRadius: 120,
                 paddingAngle: 5,
                 cornerRadius: 5,
                 startAngle: -135,
@@ -128,32 +143,44 @@ const DashBoard = () => {
                 cx: 150,
                 cy: 150,
                 highlightScope: { faded: "global", highlighted: "item" },
-                faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+                faded: {
+                  innerRadius: 30,
+                  additionalRadius: -30,
+                  color: "gray",
+                },
               },
             ]}
-            width={600}
-            height={600}
+            width={450}
+            height={300}
           />
         </div>
-        <div>
-          <h2>Previous Month</h2>
+        <div className="bg-blue-300 p-4 rounded-3xl border-4 border-blue-800">
+          <h2 className="p-4 text-2xl text-blue-900 font-semibold border-b-2 border-blue-900 flex justify-between">
+            Task Report Last Month <div className="animate-bounce ">👇</div>
+          </h2>
           <PieChart
-            series={[{
-              data: [...pieChartDataPreviousMonth],
-              innerRadius: 30,
-              outerRadius: 100,
-              paddingAngle: 5,
-              cornerRadius: 5,
-              startAngle: -135,
-              endAngle: 180,
-              cx: 150,
-              cy: 150,
-              highlightScope: { faded: "global", highlighted: "item" },
-              faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
-            },]}
+            series={[
+              {
+                data: [...pieChartDataPreviousMonth],
+                innerRadius: 50,
+                outerRadius: 120,
+                paddingAngle: 5,
+                cornerRadius: 5,
+                startAngle: -135,
+                endAngle: 180,
+                cx: 150,
+                cy: 150,
+                highlightScope: { faded: "global", highlighted: "item" },
+                faded: {
+                  innerRadius: 30,
+                  additionalRadius: -30,
+                  color: "gray",
+                },
+              },
+            ]}
             i
-            width={400}
-            height={400}
+            width={450}
+            height={300}
           />
         </div>
       </div>
