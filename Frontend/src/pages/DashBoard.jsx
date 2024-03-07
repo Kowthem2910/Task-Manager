@@ -1,7 +1,7 @@
 import Layout from "../Utils/components/layout";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { PieChart } from "@mui/x-charts";
+import { PieChart, pieArcLabelClasses  } from "@mui/x-charts";
 import { getTaskFromStore, getUserTasks } from "@/Functions/FireBaseFunctions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -126,8 +126,8 @@ const DashBoard = () => {
       </div>
       <div></div>
       <div className="flex flex-wrap gap-4 justify-around w-full ">
-        <div className="bg-blue-300 p-4 rounded-3xl border-4 border-blue-800">
-          <h2 className="p-4 text-2xl text-blue-900 font-semibold border-b-2 border-blue-900 flex justify-between">
+        <div className="bg-blue-200 p-4 rounded-3xl border-2 border-blue-700 dark:bg-slate-800 ">
+          <h2 className="p-4 text-2xl text-blue-900 font-semibold border-b-1 border-blue-700 dark:text-white flex justify-between">
             Task Report this Month <div className="animate-bounce ">👇</div>
           </h2>
           <PieChart
@@ -150,12 +150,19 @@ const DashBoard = () => {
                 },
               },
             ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fill: '#ffffff',
+                fontWeight: 'bold',
+              },
+            }}
             width={450}
             height={300}
+            className=" text-white"
           />
         </div>
-        <div className="bg-blue-300 p-4 rounded-3xl border-4 border-blue-800">
-          <h2 className="p-4 text-2xl text-blue-900 font-semibold border-b-2 border-blue-900 flex justify-between">
+        <div className="bg-blue-200 p-4 rounded-3xl border-2 border-blue-700 dark:bg-slate-800 dark:text-white">
+          <h2 className="p-4 text-2xl text-blue-900 font-semibold border-b-1 border-blue-700 dark:text-white flex justify-between">
             Task Report Last Month <div className="animate-bounce ">👇</div>
           </h2>
           <PieChart

@@ -2,34 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/Utils/components/layout";
 import Icon from "@/Utils/Icons";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../components/ui/dialog";
-import {
-  Select,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import CustomDialog from "@/Utils/components/Dialog";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
 import {
   AddTaskToStore,
   deleteTask,
@@ -62,9 +37,9 @@ const Boards = () => {
   const handleDateChange = (newDate) => {
     const date1 = new Date(newDate);
     const formattedDate = date1.toISOString();
-    setDate(formattedDate); 
-    console.log(formattedDate)
-    console.log(date)
+    setDate(formattedDate);
+    console.log(formattedDate);
+    console.log(date);
   };
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue !== "") {
@@ -168,87 +143,22 @@ const Boards = () => {
     <Layout pageName="Boards">
       <div className=" h-full w-full flex flex-col p-3 items-start justify-start ">
         <div className=" h-[50px] rounded-md w-full flex flex-row items-center gap-3">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 h-[36px]">
-                <Icon name="PlusCircle" size={20} /> Add Task{" "}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Task Assigner</DialogTitle>
-                <DialogDescription>
-                  Assign Task to the user here.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Select
-                    onValueChange={(e) => setSelectedValue(e)}
-                    value={selectedValue}
-                  >
-                    <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Select person" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {users?.map((user) => (
-                        <SelectItem key={user.email} value={user.email}>
-                          {user.userName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right ">
-                    Task Name
-                  </Label>
-                  <Input
-                    placeholder="Enter Task Details"
-                    onChange={(e) => setTaskName(e.target.value)}
-                    value={taskName}
-                    className="w-[280px]"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right ">
-                    Due Date
-                  </Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[280px] justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        handleDateChange={handleDateChange}
-                        // onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit" onClick={handleAddTask}>
-                  Confirm
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <CustomDialog
+          selectedValue={selectedValue}
+            setSelectedValue={setSelectedValue}
+            taskName={taskName}
+            handleAddTask={handleAddTask}
+            handleDateChange={handleDateChange}
+            setTaskName={setTaskName}
+            users={users}
+            date={date}
+            setDate={setDate}
+          >
+            <Button variant='outline'>
+              <Icon name="PlusCircle" size={20} />
+              <p className=' ml-2'>Add Task</p>
+            </Button>
+          </CustomDialog>
         </div>
         <div className=" flex flex-col gap-2  w-full min-h-max mt-3 overflow-y-scroll overflow-x-hidden">
           {tasks?.map((task) => (
@@ -259,6 +169,9 @@ const Boards = () => {
               <h4 className=" w-[60%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
                 {task.name}
               </h4>
+              <p className=" w-[10%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
+                {format(task.dueDate, 'dd-MM-yyyy')}
+              </p>
               <p className=" w-[30%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
                 {task.assignedTo}
               </p>
