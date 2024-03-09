@@ -62,7 +62,7 @@ const Login = () => {
 
   return (
     <div className="relative animate__animated animate__fadeInDownBig h-screen overflow-hidden bg-white w-screen flex items-center justify-around z-10">
-      <div className="animate__animated animate__fadeInLeftBig w-[350px] md:w-[450px] h-[450px] rounded-lg bg-gray-800 shadow-lg flex flex-col items-center ">
+      <div className="animate__animated animate__fadeInLeftBig w-[350px] md:w-[450px] h-[450px] rounded-lg bg-blue-300 dark:bg-slate-900 shadow-lg flex flex-col items-center ">
         <form
           className=" h-full w-full box-border p-12 flex flex-col justify-start"
           onSubmit={(e) => {
