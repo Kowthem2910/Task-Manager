@@ -38,8 +38,6 @@ const Boards = () => {
     const date1 = new Date(newDate);
     const formattedDate = date1.toISOString();
     setDate(formattedDate);
-    console.log(formattedDate);
-    console.log(date);
   };
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue !== "") {
@@ -118,6 +116,7 @@ const Boards = () => {
       prev.map((task) => (task.taskId === taskId ? { ...task, status } : task))
     );
     var payload = {
+      from: userInfo.email,
       to: task?.assignedTo,
       subject: "Task Assigned",
       text: task?.name,

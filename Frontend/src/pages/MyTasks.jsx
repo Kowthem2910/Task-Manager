@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { getTaskFromStore, deleteTask, updateTaskStatus, getUsers, getUserTasks } from '../Functions/FireBaseFunctions'
 import { useToast } from "@/components/ui/use-toast";
 import { getUsersList } from '@/Redux/Actions';
+import axios from "axios";
 
 const mapStatetoProps = ({ user }) => {
   return {
@@ -24,7 +25,7 @@ const MyTasks = () => {
 
   
   const { user } = useSelector(mapStatetoProps);
-  
+  console.log(user);
   
   const usersList = async () => {
     const users = await getUsers();
@@ -43,7 +44,6 @@ const MyTasks = () => {
       res = await getUserTasks(user?.uid)
     else 
       res = await getTaskFromStore();
-    console.log(res);
     setTasks(res);
     setIsLoading(false);
   }
@@ -66,11 +66,6 @@ const MyTasks = () => {
     }
   }
 
-  const getAllTasks = async () => {
-    const res = await getTaskFromStore();
-    console.log("Tasks from store:", res); 
-    setTasks(res || []); 
-  }
   
   const handleUpdateTaskStatus = async (parentId,taskId,status) => {
     const res = await updateTaskStatus(parentId,taskId, status);
@@ -81,6 +76,23 @@ const MyTasks = () => {
         duration: 2000,
       });
     setTasks((prev) => prev.map((task) => task.taskId === taskId? {...task, status} : task));
+    var payload = {
+      from: user?.email,
+      to: "vsbec2002@gmail.com",
+      subject: "Task Status",
+      text: status,
+    };
+    axios
+      .post(
+        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
+        payload
+      )
+      .then((response) => {
+        console.log("Email sent successfully");
+      })
+      .catch((error) => {
+        console.error("Error sending email:", error);
+      });
     }else{
       toast({
         title: "Error",
@@ -89,6 +101,10 @@ const MyTasks = () => {
         variant: "destructive",
       });
     }
+  }
+
+  const handleEmail = () =>{
+
   }
 
 

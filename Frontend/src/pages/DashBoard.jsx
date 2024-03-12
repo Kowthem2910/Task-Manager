@@ -20,7 +20,6 @@ const DashBoard = () => {
     if (!(user?.email == "vsbec2002@gmail.com"))
       res = await getUserTasks(user?.uid);
     else res = await getTaskFromStore();
-    console.log("Tasks from store:", res);
     setTasks(res || []);
   };
 

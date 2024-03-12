@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 const mail = async (req, res) => {
   console.log(req)
-  const { to, subject, text} = req.body;
+  const { to, subject, text, from} = req.body;
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -13,7 +13,7 @@ const mail = async (req, res) => {
   });
 
   const message = {
-    from: 'vsbec2002@gmail.com', 
+    from: from, 
     to: to,
     subject: subject,
     text: text,
