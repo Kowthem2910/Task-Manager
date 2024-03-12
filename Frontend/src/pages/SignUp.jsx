@@ -82,7 +82,7 @@ const SignUp = () => {
               value={userName}
               placeholder="Please Enter Full Name"
               onChange={(e) => setUserName(e.target.value)}
-              className='bg-white'
+              className='bg-white text-black'
             />
           </div>
           <div className=" flex flex-col gap-2 mb-4">
@@ -129,7 +129,7 @@ const SignUp = () => {
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className='bg-white'
+                className='bg-white text-black'
               />
               <Toggle
                 variant="outline"

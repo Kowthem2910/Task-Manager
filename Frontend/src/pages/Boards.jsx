@@ -105,10 +105,6 @@ const Boards = () => {
     }
   };
 
-  const getCurrentUserTasks = async () => {
-    const res = await getUserTasks(userInfo.uid);
-    setTasks(res);
-  };
 
   const handleUpdateTaskStatus = async (parentId, taskId, status, task) => {
     updateTaskStatus(parentId, taskId, status);
@@ -117,13 +113,18 @@ const Boards = () => {
     );
     var payload = {
       from: userInfo.email,
+      fromName:userInfo.displayName,
       to: task?.assignedTo,
+      toName:task?.userName,
       subject: "Task Assigned",
-      text: task?.name,
+      task: task?.name,
+      dueDate: task?.dueDate,
+      status: task?.status,
+      type:'assign_task'
     };
     axios
       .post(
-        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
+        "http://localhost:5000/api/user/mail",
         payload
       )
       .then((response) => {
