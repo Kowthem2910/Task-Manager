@@ -65,7 +65,7 @@ const SignUp = () => {
 
   return (
     <div className="animate__animated animate__fadeInDownBig h-screen overflow-hidden bg-white w-screen flex items-center justify-around">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-4 w-[350px] md:w-[550px] h-max flex flex-col items-center">
+      <div className="bg-blue-300 dark:bg-slate-900 shadow-lg rounded-lg p-4 w-[350px] md:w-[550px] h-max flex flex-col items-center">
         <form
           className=" h-full w-full box-border p-4 flex flex-col justify-start"
           onSubmit={(e) => {

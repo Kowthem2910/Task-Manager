@@ -2,16 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/Utils/components/layout";
 import Icon from "@/Utils/Icons";
-import { Input } from "@/components/ui/input";
-import { Dialog } from "../components/ui/dialog";
-import {
-  Select,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  SelectValue,
-} from "@/components/ui/select";
+import CustomDialog from "@/Utils/components/Dialog";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
 import {
   AddTaskToStore,
   deleteTask,
@@ -21,6 +14,7 @@ import {
 } from "../Functions/FireBaseFunctions";
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
+
 
 const mapStatetoProps = ({ user }) => {
   return {
@@ -39,8 +33,13 @@ const Boards = () => {
   });
   const [tasks, setTasks] = useState([]);
   const { toast } = useToast();
-  const { user } = useSelector(mapStatetoProps);
+  const [date, setDate] = useState();
 
+  const handleDateChange = (newDate) => {
+    const date1 = new Date(newDate);
+    const formattedDate = date1.toISOString();
+    setDate(formattedDate);
+  };
   const handleAddTask = async () => {
     if (taskName !== "" && selectedValue !== "") {
       const userUid = users?.find((user) => user.email === selectedValue)?.uid;
@@ -53,7 +52,7 @@ const Boards = () => {
         userName: userName,
         assignedTo: selectedValue,
         assignedToUid: userUid,
-        dueDate: new Date().toISOString(),
+        dueDate: date,
         status: "Task Assigned",
       };
       setTasks((prev) => [...prev, taskPayload]);
@@ -107,10 +106,6 @@ const Boards = () => {
     }
   };
 
-  const getCurrentUserTasks = async () => {
-    const res = await getUserTasks(userInfo.uid);
-    setTasks(res);
-  };
 
   const handleUpdateTaskStatus = async (parentId, taskId, status, task) => {
     updateTaskStatus(parentId, taskId, status);
@@ -118,12 +113,21 @@ const Boards = () => {
       prev.map((task) => (task.taskId === taskId ? { ...task, status } : task))
     );
     var payload = {
+      from: userInfo.email,
+      fromName:userInfo.displayName,
       to: task?.assignedTo,
+      toName:task?.userName,
       subject: "Task Assigned",
-      text: task?.name,
+      task: task?.name,
+      dueDate: task?.dueDate,
+      status: task?.status,
+      type:'assign_task'
     };
     axios
-      .post("https://vsb-task-manager-backend.vercel.app/api/user/mail", payload)
+      .post(
+        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
+        payload
+      )
       .then((response) => {
         console.log("Email sent successfully");
       })
@@ -140,30 +144,22 @@ const Boards = () => {
     <Layout pageName="Boards">
       <div className=" h-full w-full flex flex-col p-3 items-start justify-start ">
         <div className=" h-[50px] rounded-md w-full flex flex-row items-center gap-3">
-          <Input
-            placeholder="Enter Task Details"
-            onChange={(e) => setTaskName(e.target.value)}
-            value={taskName}
-            className="w-full"
-          />
-          <Select
-            onValueChange={(e) => setSelectedValue(e)}
-            value={selectedValue}
+          <CustomDialog
+          selectedValue={selectedValue}
+            setSelectedValue={setSelectedValue}
+            taskName={taskName}
+            handleAddTask={handleAddTask}
+            handleDateChange={handleDateChange}
+            setTaskName={setTaskName}
+            users={users}
+            date={date}
+            setDate={setDate}
           >
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Select User" />
-            </SelectTrigger>
-            <SelectContent>
-              {users?.map((user) => (
-                <SelectItem key={user.email} value={user.email}>
-                  {user.userName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button flex className="gap-2 h-[36px]" onClick={handleAddTask}>
-            <Icon name="PlusCircle" size={20} /> Add Task{" "}
-          </Button>
+            <Button variant='outline'>
+              <Icon name="PlusCircle" size={20} />
+              <p className=' ml-2'>Add Task</p>
+            </Button>
+          </CustomDialog>
         </div>
         <div className=" flex flex-col gap-2  w-full min-h-max mt-3 overflow-y-scroll overflow-x-hidden">
           {tasks?.map((task) => (
@@ -174,6 +170,9 @@ const Boards = () => {
               <h4 className=" w-[60%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
                 {task.name}
               </h4>
+              <p className=" w-[10%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
+                {format(task.dueDate, 'dd-MM-yyyy')}
+              </p>
               <p className=" w-[30%] border-r-2 dark:border-slate-800 dark:text-white text-black border-blue-800">
                 {task.assignedTo}
               </p>
@@ -189,7 +188,7 @@ const Boards = () => {
                     task
                   );
                 }}
-                disabled={task.status === "Task Sent"}
+                disabled={task.status !== "Task Assigned"}
               >
                 <Icon name="Check" size={20} />
               </Button>

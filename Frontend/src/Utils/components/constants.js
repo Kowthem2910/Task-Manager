@@ -1,4 +1,4 @@
-const SideBardata = [
+const ADMIN_SIDE_BAR = [
     {
         "id": 1,
         "title": "Dashboard",
@@ -24,7 +24,7 @@ const SideBardata = [
         "icon": "Settings",
     },
 ]
-const SideBardata1 = [
+const USER_SIDE_BAR = [
     {
         "id": 1,
         "title": "Dashboard",
@@ -63,4 +63,13 @@ const taskStatusOptions = [
 
 ]
 
-export { SideBardata, taskStatusOptions, SideBardata1};
+
+const getSidebarData = (isAdmin) => {
+    if(isAdmin){
+        return ADMIN_SIDE_BAR;
+    }else{
+        return USER_SIDE_BAR;
+    }
+}
+
+export { taskStatusOptions, getSidebarData};

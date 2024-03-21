@@ -20,6 +20,7 @@ import { v4 as uuid4 } from "uuid";
 const signIn = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password);
+    const isAdmin = await getUser(user.user.uid);
     const userData = {
       uid: user.user.uid,
       email: user.user.email,
@@ -28,6 +29,7 @@ const signIn = async (email, password) => {
       photoUrl: user.user.photoURL,
       phone: user.user.phoneNumber,
       isLoggedin: true,
+      isAdmin:isAdmin || false
     };
     return { data: userData, status: "ok" };
   } catch (error) {
@@ -86,6 +88,13 @@ const getUsers = async () => {
   return users;
 };
 
+const getUser = async (uid) =>{
+  const docRef = doc(db, 'Users', uid);
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data()
+  return docData.isAdmin
+}
+
 const AddTaskToStore = async (task, id) => {
   const taskId = uuid4();
   try {
@@ -114,21 +123,6 @@ const getTaskFromStore = async () => {
         parentId: doc.data().assignedToUid,
       }))
     )
-    // await Promise.all( 
-    //   querySnapshot.docs.map(async (taskDoc) => {
-    //     console.log(taskDoc);
-    //     const subCollectionSnapshot = await getDocs(
-    //       collection(taskDoc.ref, "assignedTasks")
-    //     );
-    //     tasks.push(
-    //       ...subCollectionSnapshot.docs.map((doc) => ({
-    //         id: doc.id,
-    //         ...doc.data(),
-    //         parentId: taskDoc.id,
-    //       }))
-    //     );
-    //   })
-    // );
     return tasks;
   } catch (error) {
     console.log(error);
@@ -139,12 +133,9 @@ const getTaskFromStore = async () => {
 
 const deleteTask = async (parentTaskId, taskId) => {
   try {
-    console.log(parentTaskId+" "+taskId);
     const parentTaskRef = doc(db, "Tasks", parentTaskId);
     const subcollectionRef = collection(parentTaskRef, "assignedTasks");
-    console.log("Delete:"+subcollectionRef+" "+taskId);
     const taskRef = doc(subcollectionRef, taskId);
-    console.log(taskRef);
     await deleteDoc(taskRef);
     return {
       code: 200,
