@@ -78,8 +78,8 @@ const MyTasks = () => {
     var payload = {
       from: task?.assignedTo,
       fromName: task?.userName,
-      to: user.email,
-      toName: user.displayName,
+      to: "vsbec2002@gmail.com",
+      toName: "Admin",
       subject: "Task Status",
       task: task?.name,
       status: task?.status,
@@ -87,7 +87,7 @@ const MyTasks = () => {
     };
     axios
       .post(
-        "http://localhost:5000/api/user/mail",
+        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
         payload
       )
       .then((response) => {
