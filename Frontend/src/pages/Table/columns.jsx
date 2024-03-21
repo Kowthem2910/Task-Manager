@@ -52,7 +52,7 @@ const getColumns = (handleDeleteTask, handleUpdateTaskStatus) => {
                 <CustomSelect
                   options={taskStatusOptions}
                   title={row.getValue('status')}
-                  onChange={(e) => {handleUpdateTaskStatus(row.original.parentId, row.getValue('taskId'), e)}}s
+                  onChange={(e) => {handleUpdateTaskStatus(row.original.parentId, row.getValue('taskId'),e, row.original)}}s
                 />
               )
             },

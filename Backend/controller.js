@@ -28,9 +28,9 @@ function getTemplateName(type, content) {
       return {
         template:'UpdateTask',
         context:{
-          from:content.from,
-          to:content.to,
-          task:content.task,
+          from:content.fromName,
+          to:content.toName,
+          text:content.task,
           subject:"Task Status Updated",
           status:content.status,
           dueDate:content.dueDate,

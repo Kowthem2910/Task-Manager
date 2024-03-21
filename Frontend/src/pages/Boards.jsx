@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 
+
 const mapStatetoProps = ({ user }) => {
   return {
     user: user.userInfo,
@@ -124,7 +125,7 @@ const Boards = () => {
     };
     axios
       .post(
-        "http://localhost:5000/api/user/mail",
+        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
         payload
       )
       .then((response) => {
@@ -187,7 +188,7 @@ const Boards = () => {
                     task
                   );
                 }}
-                disabled={task.status === "Task Sent"}
+                disabled={task.status !== "Task Assigned"}
               >
                 <Icon name="Check" size={20} />
               </Button>

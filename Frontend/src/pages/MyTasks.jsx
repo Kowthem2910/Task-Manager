@@ -3,7 +3,7 @@ import Layout from '../Utils/components/layout'
 import { TableComponent } from './Table/Table'
 import  getColumns  from './Table/columns'
 import {useDispatch, useSelector} from "react-redux";
-import { getTaskFromStore, deleteTask, updateTaskStatus, getUsers, getUserTasks } from '../Functions/FireBaseFunctions'
+import { getTaskFromStore, deleteTask, updateTaskStatus, getUsers, getUserTasks } from '../Functions/FireBaseFunctions';
 import { useToast } from "@/components/ui/use-toast";
 import { getUsersList } from '@/Redux/Actions';
 import axios from "axios";
@@ -25,7 +25,6 @@ const MyTasks = () => {
 
   
   const { user } = useSelector(mapStatetoProps);
-  console.log(user);
   
   const usersList = async () => {
     const users = await getUsers();
@@ -67,7 +66,7 @@ const MyTasks = () => {
   }
 
   
-  const handleUpdateTaskStatus = async (parentId,taskId,status) => {
+  const handleUpdateTaskStatus = async (parentId,taskId,status,task) => {
     const res = await updateTaskStatus(parentId,taskId, status);
     if (res.status === "ok") {
       toast({
@@ -77,14 +76,18 @@ const MyTasks = () => {
       });
     setTasks((prev) => prev.map((task) => task.taskId === taskId? {...task, status} : task));
     var payload = {
-      from: user?.email,
-      to: "vsbec2002@gmail.com",
+      from: task?.assignedTo,
+      fromName: task?.userName,
+      to: user.email,
+      toName: user.displayName,
       subject: "Task Status",
-      text: status,
+      task: task?.name,
+      status: task?.status,
+      type:'update_task',
     };
     axios
       .post(
-        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
+        "http://localhost:5000/api/user/mail",
         payload
       )
       .then((response) => {
@@ -103,13 +106,10 @@ const MyTasks = () => {
     }
   }
 
-  const handleEmail = () =>{
-
-  }
 
 
   useEffect(() => {
-    handleGetTasks()
+    handleGetTasks();
     setColumns(getColumns(handleDeleteTask, handleUpdateTaskStatus))
   },[])
 
