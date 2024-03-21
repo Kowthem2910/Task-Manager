@@ -46,7 +46,7 @@ const mail = async (req, res) => {
     service: "gmail",
     auth: {
       user: "vsbec2002@gmail.com",
-      pass: "fscw awmp iija bthb",
+      pass: "qpko rhwp ymvp molp",
     },
   });
 
