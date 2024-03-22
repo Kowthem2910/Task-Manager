@@ -7,13 +7,12 @@ import {getFirestore} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyA-iEZIYnj6WE6tfvChmn-3jne-iyi8wN4",
-  authDomain: "task-manager-606c1.firebaseapp.com",
-  projectId: "task-manager-606c1",
-  storageBucket: "task-manager-606c1.appspot.com",
-  messagingSenderId: "325044715087",
-  appId: "1:325044715087:web:ba4b5ad3b2f94467e4f43a",
-  measurementId: "G-F41K5ZX3J0"
+  apiKey: "AIzaSyCzmX-vGJermiGdXprxfJxNG_fFjA8CQNw",
+  authDomain: "taskify-cf1b2.firebaseapp.com",
+  projectId: "taskify-cf1b2",
+  storageBucket: "taskify-cf1b2.appspot.com",
+  messagingSenderId: "853381935344",
+  appId: "1:853381935344:web:c3e4122e976b0a97cb5235"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
