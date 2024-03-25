@@ -87,7 +87,7 @@ const MyTasks = () => {
     };
     axios
       .post(
-        "https://vsb-task-manager-backend.vercel.app/api/user/mail",
+        "http://localhost:5000/api/user/mail",
         payload
       )
       .then((response) => {

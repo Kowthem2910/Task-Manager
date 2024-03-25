@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const path = require("path");
-// var hbs = require("nodemailer-express-handlebars");
+var html = require("nodemailer-express-handlebars");
 
 function getTemplateName(type, content) {
   switch (type){
@@ -50,17 +50,17 @@ const mail = async (req, res) => {
     },
   });
 
-  // const handlebarOptions = {
-  //   viewEngine: {
-  //     extName: ".hbs",
-  //     partialsDir: path.resolve("./views"),
-  //     defaultLayout: false,
-  //   },
-  //   viewPath: path.resolve("./views"),
-  //   extName: ".hbs",
-  // };
+  const handlebarOptions = {
+    viewEngine: {
+      extName: ".html",
+      partialsDir: path.resolve("./views"),
+      defaultLayout: false,
+    },
+    viewPath: path.resolve("./views"),
+    extName: ".html",
+  };
 
-  // transporter.use("compile", hbs(handlebarOptions));
+  transporter.use("compile", html(handlebarOptions));
 
   const template = getTemplateName(req.body.type, req.body);
 
